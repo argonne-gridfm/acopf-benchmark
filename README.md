@@ -45,17 +45,6 @@ pip install matpowercaseframes
 | case 14 | (17, 9)             | (3, 11)                 | (5, 0)               | (5, 0)               | (11, 0)                | (11, 0)                | (1, 0)                   | (1, 0)                   |
 | case 30 | (34, 9)             | (7, 11)                 | (6, 0)               | (6, 0)               | (21, 0)                | (21, 0)                | (2, 0)                   | (2, 0)                   | --> |
 
-## Data processing
-
-- Changes:
-  - Customized `OPFDataset` 
-    - ![image](figures/GridFM.png)
-    - download/process files in parallel - save time of processing
-    - remove tmp folder to save disk space, similar to the size of raw data
-    - remove split of data
-    - split data after loading the dataset 
-    - concatenate data from different cases by `+` operator, e.g., `ds1 + ds2`
-
 
 ### HeteroGNN
 
