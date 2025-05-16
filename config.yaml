@@ -1,0 +1,47 @@
+---
+# root: "/eagles/projects/ParaLLM/jinh/dataset_release_1"
+root: "/home/jinh/lcrc/projects/llm_ad/data"
+url: "https://storage.googleapis.com/gridopt-dataset"
+task:
+  unsupervised:
+    epochs: 100
+  supervised:
+    epochs: 3
+models:
+  HeteroGNN:
+    hidden_channels: 64
+    num_layers: 3
+    backend: "gat"
+  HGT:
+    hidden_channels: 64
+    num_layers: 3
+    num_heads: 2
+  HEAT:
+    hidden_channels: 64
+    num_layers: 3
+    attention_heads: 2
+  RGAT:
+    hidden_channels: 64
+    num_layers: 3
+    num_heads: 2
+loader: 
+  batch_size: 128
+  num_workers: 4
+  pin_memory: true
+  shuffle: true
+optimizer:
+  lr: 0.001
+train_split: 0.8
+test_split: 0.1
+val_split: 0.1
+training:
+  cases: 
+    - "pglib_opf_case14_ieee"
+    - "pglib_opf_case30_ieee"
+    - "pglib_opf_case57_ieee"
+    - "pglib_opf_case118_ieee"
+testing:
+  cases:
+    - "pglib_opf_case2000_goc"
+  
+  

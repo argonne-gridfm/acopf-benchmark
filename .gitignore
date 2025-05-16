@@ -1,0 +1,58 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution/packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+ENV/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+.pytest_cache/
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Local development settings
+.env
+.env.local
+.env.*.local
+
+# Project specific
+*.pkl
+*.h5
+*.npy
+*.npz
+
+# _draft/
+# _tmp/
+lightning_logs/
+logs/
