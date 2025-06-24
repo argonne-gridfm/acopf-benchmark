@@ -1,0 +1,34 @@
+# Core dependencies
+torch==2.6.0
+torchvision
+torchaudio
+numpy
+scipy
+
+# PyTorch Geometric and related packages
+torch-geometric
+pyg-lib
+torch-scatter
+torch-sparse
+torch-cluster
+torch-spline-conv
+
+# Machine Learning and Training
+lightning
+tensorboard
+
+# Power systems
+pandapower
+
+# Utilities
+tqdm
+joblib
+pyyaml
+ipykernel
+matplotlib
+pytest
+
+# Note: For CUDA support, install PyTorch packages with appropriate CUDA version
+# using the index URLs as specified in setup.sh
+# For CPU-only: --index-url https://download.pytorch.org/whl/cpu
+# For CUDA 12.6: --index-url https://download.pytorch.org/whl/cu126
