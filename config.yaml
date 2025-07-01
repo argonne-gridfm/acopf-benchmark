@@ -1,6 +1,6 @@
 ---
 # root: "/eagles/projects/ParaLLM/jinh/dataset_release_1"
-root: "/home/jinh/lcrc/projects/llm_ad/data"
+root: "/home/jinh/ParaLLMs/jinh/"
 url: "https://storage.googleapis.com/gridopt-dataset"
 task:
   unsupervised:
@@ -31,6 +31,11 @@ loader:
   shuffle: true
 optimizer:
   lr: 0.001
+  betas: 
+    - 0.9
+    - 0.999
+  eps: 1.0e-08
+  weight_decay: 0
 train_split: 0.8
 test_split: 0.1
 val_split: 0.1

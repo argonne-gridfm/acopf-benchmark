@@ -85,6 +85,10 @@ class OPFDataset(InMemoryDataset):
             final dataset. (default: :obj:`None`)
         force_reload (bool, optional): Whether to re-process the dataset.
             (default: :obj:`False`)
+        n_jobs (int, optional): The number of jobs to use for parallel
+            processing. If set to :obj:`-1`, all available cores will be used.
+            NOTE: for larger dataset, it is recommended to set this to a lower value
+            to avoid memory issues. (default: :obj:`-1`)
     """
     url = 'https://storage.googleapis.com/gridopt-dataset'
 
@@ -104,18 +108,17 @@ class OPFDataset(InMemoryDataset):
             'pglib_opf_case13659_pegase',
         ] = 'pglib_opf_case14_ieee',
         num_groups: int = 20,
-        # groups: Union[str, List[int]] = "all",
         topological_perturbations: bool = False,
         transform: Optional[Callable] = None,
         pre_transform: Optional[Callable] = None,
         pre_filter: Optional[Callable] = None,
         save_pkl: bool = False,
         force_reload: bool = False,
+        n_jobs: int = -1,
         # raw_folder: str = None,
     ) -> None:
 
         self.case_name = case_name
-        # self.groups = groups
         self.num_groups = num_groups
         self.topological_perturbations = topological_perturbations
 
@@ -123,6 +126,7 @@ class OPFDataset(InMemoryDataset):
         if topological_perturbations:
             self._release += '_nminusone'
         self.save_pkl = save_pkl
+        self.n_jobs = n_jobs
 
         # # # NOTE: add admittance matrix Y to the dataset
         # current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -136,7 +140,7 @@ class OPFDataset(InMemoryDataset):
 
         # self.raw_folder = raw_folder
         # NOTE:
-        #   check downloaded: if raw files are not ready, download from url
+        #   check downloaded: if raw files are not ready, download fro  m url
         #   check processed: if processed files are not exist, process raw files
         super().__init__(root, transform, pre_transform, pre_filter,
                          force_reload=force_reload)
@@ -152,8 +156,7 @@ class OPFDataset(InMemoryDataset):
         #     data_list.append(data)
 
         # self.data, self.slices = self.collate(data_list)
-        out = torch.load(self.processed_paths[0])
-        self.data, self.slices = out
+        self.data, self.slices = torch.load(self.processed_paths[0])
 
     @property
     def raw_dir(self) -> str:
@@ -188,7 +191,7 @@ class OPFDataset(InMemoryDataset):
         r""" Download .tar.gz files """
         print("download files")
 
-        results = Parallel(n_jobs=-1, backend="multiprocessing")(
+        results = Parallel(n_jobs=self.n_jobs, backend="multiprocessing")(
             delayed(self.download_and_extract)(name)
             for name in self.raw_file_names)
 
@@ -206,7 +209,7 @@ class OPFDataset(InMemoryDataset):
             os.makedirs(self.tmp_dir)
 
         with parallel_backend('multiprocessing'):
-            results = Parallel(n_jobs=-1)(
+            results = Parallel(n_jobs=self.n_jobs)(
                 delayed(self.process_group)(group) for group in range(self.num_groups))
 
         print(f"Processed {len(results)} groups")
@@ -227,7 +230,7 @@ class OPFDataset(InMemoryDataset):
             extract_tar(osp.join(self.raw_dir, self.raw_file_names[group_id]), self.raw_dir)
             group_json_files = glob(osp.join(self.tmp_dir, f'group_{group_id}', '*.json'))
 
-        data_list = Parallel(n_jobs=-1, backend="threading")(
+        data_list = Parallel(n_jobs=self.n_jobs, backend="threading")(
             delayed(process_json_file)(fn) for fn in tqdm.tqdm(group_json_files, desc=f"Group {group_id}"))
 
         if self.pre_filter is not None or self.pre_transform is not None:

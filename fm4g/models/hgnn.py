@@ -70,6 +70,20 @@ class HeteroGNN(torch.nn.Module):
             "generator": Linear(hidden_channels, out_channels),
         })
 
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        """Reset parameters of the model."""
+        for lin in self.lin_dict.values():
+            lin.reset_parameters()
+        for conv in self.convs:
+            for rel_conv in conv.convs.values():
+                if hasattr(rel_conv, 'reset_parameters'):
+                    rel_conv.reset_parameters()
+            conv.reset_parameters()
+        for out in self.out_dict.values():
+            out.reset_parameters()
+
     def forward(self, x_dict, edge_index_dict, edge_attr_dict=None):
         # Transform input features
         x_dict = {
@@ -83,15 +97,17 @@ class HeteroGNN(torch.nn.Module):
                 x_dict = conv(x_dict, edge_index_dict, edge_attr_dict=edge_attr_dict)
             else:
                 x_dict = conv(x_dict, edge_index_dict)
-            x_dict = {key: F.relu(x) for key, x in x_dict.items()}
+            # NOTE: no activation function applied here
+            # x_dict = {key: F.relu(x) for key, x in x_dict.items()}
 
         # Final predictions
         bus_out = self.out_dict["bus"](x_dict["bus"])
         gen_out = self.out_dict["generator"](x_dict["generator"])
 
         # Apply final activation sigmoid to ensure values range from 0 to 1
-        bus_out = torch.sigmoid(bus_out)
-        gen_out = torch.sigmoid(gen_out)
+        # bus_out = torch.sigmoid(bus_out)
+        # gen_out = torch.sigmoid(gen_out)
+        bus_out[:, 1] = torch.relu(bus_out[:, 1])  # Ensure voltage magnitude is non-negative
         return {"bus": bus_out, "generator": gen_out}
 
 
