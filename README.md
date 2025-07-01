@@ -17,16 +17,15 @@ pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv s
 pip install -e .
 ```
 
-<!-- 
+Alternatively, you can create a conda environment and install the dependencies from `requirements.txt`:
 
-pip install torch==2.0.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
-pip install torch-geometric
-pip install torch_cluster torch_scatter torch_sparse torch_spline_conv pyg_lib -f https://data.pyg.org/whl/torch-2.0.0+cu117.html
-pip install joblib ipykernel tqdm
+```bash
+conda create -n fm4g python=3.10
+conda activate fm4g
+pip install -r requirements.txt
+pip install -e . 
+```
 
-conda install pytorch==2.0.0 torchvision==0.15.0 torchaudio==2.0.0 pytorch-cuda=11.7 pyg scikit-learn pandapower -c pytorch -c nvidia -c conda-forge -c pyg
-pip install matpowercaseframes
- -->
 
 
 <!-- ## Data
@@ -46,9 +45,9 @@ pip install matpowercaseframes
 | case 30 | (34, 9)             | (7, 11)                 | (6, 0)               | (6, 0)               | (21, 0)                | (21, 0)                | (2, 0)                   | (2, 0)                   | --> |
 
 
-### HeteroGNN
+### Base HeteroGNN
 
-```
+```py
 HeteroGNN(
   (lin_dict): ModuleDict(
     (bus): Linear(in_features=4, out_features=64, bias=True)
@@ -112,6 +111,5 @@ where $\lambda$ is a hyperparameter, $N$ is the number of buses, and $M$ is the 
 ```
 where $\hat{x}$ is the predicted variables, $\gamma_1$ and $\gamma_2$ are weights for generator cost and line violations.
 
-
-
-
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
