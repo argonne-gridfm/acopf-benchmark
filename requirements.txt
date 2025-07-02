@@ -27,6 +27,10 @@ pyyaml==6.0.2
 ipykernel==6.29.5
 matplotlib==3.10.3
 pytest==8.4.1
+deephyper==0.10.2
+mpi4py==4.1.0
+ray==2.47.1
+ipywidgets==8.1.7
 
 # Note: For CUDA support, install PyTorch packages with appropriate CUDA version
 # using the index URLs as specified in setup.sh
